@@ -204,16 +204,16 @@
         async function loadData() {
             try {
                 // Load users
-                const usersRes = await fetch('data/users.json');
+                const usersRes = await fetch('data/users.json'  + '?t=' + new Date().getTime());
                 users = await usersRes.json();
 
-                const indexRes = await fetch('data/matches/index.json');
+                const indexRes = await fetch('data/matches/index.json'  + '?t=' + new Date().getTime());
                 const matchList = await indexRes.json();
 
                 let allMatches = [];
 
                 for (let file of matchList) {
-                    const res = await fetch(`data/matches/${file}`);
+                    const res = await fetch(`data/matches/${file}`  + '?t=' + new Date().getTime());
                     const matchData = await res.json();
                     allMatches.push(matchData);
                 }
