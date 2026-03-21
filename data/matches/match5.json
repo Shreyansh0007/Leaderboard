@@ -1,0 +1,10 @@
+{
+  "matchNumber": 5,
+  "matchName": "LSG vs DC",
+  "date": "2026-04-01",
+  "entries": [
+    { "user": "U1", "points": 10 },
+    { "user": "U2", "points": 6 },
+    { "user": "U3", "points": 4 }
+  ]
+}

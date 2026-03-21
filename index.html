@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fantasy League Dashboard</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            color: white;
+        }
+
+        header {
+            text-align: center;
+            padding: 20px;
+            font-size: 24px;
+            font-weight: bold;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+        }
+
+        .container {
+            padding: 10px;
+            max-width: 1100px;
+            margin: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        th,
+        td {
+            padding: 12px;
+            text-align: center;
+        }
+
+        th {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        tr:nth-child(even) {
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        tr:hover {
+            background: rgba(255, 255, 255, 0.08);
+            cursor: pointer;
+        }
+
+        .top1 {
+            color: gold;
+            font-weight: bold;
+        }
+
+        .top2 {
+            color: silver;
+        }
+
+        .top3 {
+            color: #cd7f32;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 12px;
+            margin-top: 20px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        button {
+            padding: 10px 15px;
+            font-size: 14px;
+            border: none;
+            border-radius: 8px;
+            background: #38bdf8;
+            color: black;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 768px) {
+              #profileView {
+    padding: 10px;
+  }
+
+  #profileView p {
+    font-size: 14px;
+  }
+            h1 {
+                font-size: 20px;
+                text-align: center;
+            }
+
+            h2 {
+                font-size: 18px;
+            }
+
+            table {
+                font-size: 12px;
+            }
+
+            th,
+            td {
+                padding: 6px;
+            }
+        }
+
+        .table-container {
+            width: 100%;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="card">
+        <h2>📅 Weekly Leaderboard</h2>
+        <select id="weekSelector" onchange="renderWeeklyLeaderboard()"></select>
+        <div class="table-container">
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Name</th>
+                        <th>Matches</th>
+                        <th>Points</th>
+                    </tr>
+                </thead>
+                <tbody id="weeklyBody"></tbody>
+            </table>
+        </div>
+    </div>
+    <header>🏏 Fantasy League Dashboard</header>
+
+    <div class="container">
+
+        <!-- Leaderboard -->
+        <div id="leaderboardView" class="card">
+            <h2>🏆 Leaderboard</h2>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Name</th>
+                            <th>Matches</th>
+                            <th>Points</th>
+                            <th>Wins</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leaderboardBody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Profile View -->
+        <div id="profileView" class="card hidden">
+            <button onclick="goBack()">⬅ Back</button>
+            <h2 id="profileName"></h2>
+
+            <div>
+                <p><strong>Total Points:</strong> <span id="totalPoints"></span></p>
+                <p><strong>Matches Played:</strong> <span id="matchesPlayed"></span></p>
+                <p><strong>Wins:</strong> <span id="totalWins"></span></p>
+            </div>
+
+            <h3>Match History</h3>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Match</th>
+                            <th>Points</th>
+                            <th>D11 Points</th>
+                            <th>D11 Rank</th>
+
+                        </tr>
+                    </thead>
+                    <tbody id="historyBody"></tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        let users = [];
+        let entries = [];
+
+        async function loadData() {
+            try {
+                // Load users
+                const usersRes = await fetch('data/users.json');
+                users = await usersRes.json();
+
+                const indexRes = await fetch('data/matches/index.json');
+                const matchList = await indexRes.json();
+
+                let allMatches = [];
+
+                for (let file of matchList) {
+                    const res = await fetch(`data/matches/${file}`);
+                    const matchData = await res.json();
+                    allMatches.push(matchData);
+                }
+
+                // Flatten into entries
+                entries = [];
+
+                allMatches.forEach(match => {
+                    match.entries.forEach(e => {
+                        entries.push({
+                            match: match.matchNumber,
+                            matchName: match.matchName,
+                            date: match.date,
+                            user: e.user,
+                            points: e.points,
+                            d11_points: e.d11_points || 0,
+                            d11_rank: e.d11_rank || "-"
+                        });
+                    });
+                });
+                console.log("Users:", users);
+                console.log("Entries:", entries);
+                renderLeaderboard();
+                populateWeekSelector();
+                renderWeeklyLeaderboard();
+
+            } catch (err) {
+                console.error("Error loading data:", err);
+            }
+        }
+
+        function calculateLeaderboard() {
+            const map = {};
+
+            users.forEach(u => {
+                map[u.id] = {
+                    id: u.id,
+                    name: u.name,
+                    totalPoints: 0,
+                    best50Points: 0,
+                    matches: [],
+                    wins: 0
+                };
+            });
+
+            entries.forEach(e => {
+                map[e.user].matches.push(e.points);
+
+                if (e.points === 10) {
+                    map[e.user].wins++;
+                }
+            });
+
+            // Compute totals
+            Object.values(map).forEach(player => {
+                // Total points
+                player.totalPoints = player.matches.reduce((a, b) => a + b, 0);
+
+                // Best 50 matches
+                const sorted = [...player.matches].sort((a, b) => b - a);
+                const best50 = sorted.slice(0, 50);
+
+                player.best50Points = best50.reduce((a, b) => a + b, 0);
+                player.matchesPlayed = player.matches.length;
+            });
+            // Sort by BEST 50 points (important)
+            return Object.values(map).sort((a, b) => b.best50Points - a.best50Points);
+        }
+
+        function renderLeaderboard() {
+            const data = calculateLeaderboard();
+            const tbody = document.getElementById('leaderboardBody');
+            tbody.innerHTML = '';
+
+            data.forEach((p, index) => {
+                const row = document.createElement('tr');
+                const rankClass = index === 0 ? 'top1' : index === 1 ? 'top2' : index === 2 ? 'top3' : '';
+
+                row.innerHTML = `
+      <td class="${rankClass}">${index + 1}</td>
+      <td>${p.name}</td>
+      <td>${p.matchesPlayed}</td>
+      <td>
+  ${p.best50Points} <br>
+  <small style="opacity:0.6;">Total: ${p.totalPoints}</small>
+</td>
+      <td>${p.wins}</td>
+    `;
+
+                row.onclick = () => openProfile(p.id);
+                tbody.appendChild(row);
+            });
+        }
+
+        function openProfile(userId) {
+            document.getElementById('leaderboardView').classList.add('hidden');
+            document.getElementById('profileView').classList.remove('hidden');
+
+
+            const user = users.find(u => u.id === userId);
+
+            // ✅ FIRST define userEntries
+            const userEntries = entries.filter(e => e.user === userId);
+            const matchesPlayed = userEntries.length;
+
+            // ✅ THEN use it
+            const totalPoints = userEntries.reduce((sum, e) => sum + e.points, 0);
+            const wins = userEntries.filter(e => e.points === 10).length;
+
+            const sorted = userEntries.map(e => e.points).sort((a, b) => b - a);
+            const best50 = sorted.slice(0, 50);
+            const best50Points = best50.reduce((a, b) => a + b, 0);
+
+            document.getElementById('profileName').innerText = user.name;
+
+            document.getElementById('totalPoints').innerText =
+                `${totalPoints} (Best50: ${best50Points})`;
+            document.getElementById('matchesPlayed').innerText = matchesPlayed;
+            document.getElementById('totalWins').innerText = wins;
+
+            const historyBody = document.getElementById('historyBody');
+            historyBody.innerHTML = '';
+
+            userEntries.forEach(e => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+  <td>${e.matchName} (${e.date})</td>
+  <td>${e.points}</td>
+  <td>${e.d11_points}</td>
+  <td>${e.d11_rank}</td>
+`;
+                historyBody.appendChild(row);
+            });
+        }
+
+        function getWeekFromMatch(matchNumber) {
+            return Math.ceil(matchNumber / 10);
+        }
+
+        function calculateWeeklyLeaderboard() {
+            const weeklyMap = {};
+
+            entries.forEach(e => {
+                const week = getWeekFromMatch(e.match);
+
+                if (!weeklyMap[week]) {
+                    weeklyMap[week] = {};
+                }
+
+                if (!weeklyMap[week][e.user]) {
+                    weeklyMap[week][e.user] = {
+                        user: e.user,
+                        points: 0,
+                        matches: 0
+                    };
+                }
+
+                weeklyMap[week][e.user].points += e.points;
+                weeklyMap[week][e.user].matches += 1;
+            });
+
+            return weeklyMap;
+        }
+
+        function populateWeekSelector() {
+            const weeklyData = calculateWeeklyLeaderboard();
+            const selector = document.getElementById('weekSelector');
+
+            selector.innerHTML = '';
+
+            Object.keys(weeklyData).forEach(week => {
+                const option = document.createElement('option');
+                option.value = week;
+                option.text = `Week ${week}`;
+                selector.appendChild(option);
+            });
+        }
+
+        function renderWeeklyLeaderboard() {
+            const weeklyData = calculateWeeklyLeaderboard();
+            const selectedWeek = document.getElementById('weekSelector').value;
+
+            const data = Object.values(weeklyData[selectedWeek] || {})
+                .map(p => {
+                    const user = users.find(u => u.id === p.user);
+                    return {
+                        name: user.name,
+                        matches: p.matches,
+                        points: p.points
+                    };
+                })
+                .sort((a, b) => b.points - a.points);
+
+            const tbody = document.getElementById('weeklyBody');
+            tbody.innerHTML = '';
+
+            data.forEach((p, index) => {
+                const row = document.createElement('tr');
+
+                row.innerHTML = `
+      <td>${index + 1}</td>
+      <td>${p.name}</td>
+      <td>${p.matches}</td>
+      <td>${p.points}</td>
+    `;
+
+                tbody.appendChild(row);
+            });
+        }
+
+        function goBack() {
+            document.getElementById('profileView').classList.add('hidden');
+            document.getElementById('leaderboardView').classList.remove('hidden');
+        }
+
+        loadData();
+    </script>
+
+</body>
+
+</html>
