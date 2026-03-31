@@ -4,12 +4,13 @@
   "date": "2026-03-30",
   "entries": [
     { "user": "U1", "points": 6, "d11_points":537, "d11_rank": 2},
-    { "user": "U3", "points": 0, "d11_points":428, "d11_rank": 7 },
+    { "user": "U3", "points": 0, "d11_points":428, "d11_rank": 8 },
     { "user": "U4", "points": 0, "d11_points":475, "d11_rank": 6 },
-    { "user": "U6", "points": 0, "d11_points":502, "d11_rank": 4 },
-    { "user": "U7", "points": 0, "d11_points":480, "d11_rank": 5 },
-    { "user": "U8", "points": 0, "d11_points":412, "d11_rank": 8 },
-    { "user": "U9", "points": 0, "d11_points":355.5, "d11_rank": 9 },
+    { "user": "U6", "points": 2, "d11_points":502, "d11_rank": 4 },
+    { "user": "U7", "points": 2, "d11_points":480, "d11_rank": 5 },
+    { "user": "U8", "points": 0, "d11_points":412, "d11_rank": 9 },
+    { "user": "U9", "points": 0, "d11_points":355.5, "d11_rank": 10 },
+    { "user": "U10", "points": 0, "d11_points":452, "d11_rank": 7 },
     { "user": "U13", "points": 10, "d11_points":667, "d11_rank": 1 },
     { "user": "U15", "points": 4, "d11_points":511, "d11_rank": 3 }
   ]
