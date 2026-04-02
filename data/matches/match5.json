@@ -3,8 +3,13 @@
   "matchName": "LSG vs DC",
   "date": "2026-04-01",
   "entries": [
-    { "user": "U1", "points": 10 },
-    { "user": "U2", "points": 6 },
-    { "user": "U3", "points": 4 }
+    { "user": "U1", "points": 4, "d11_points":546.5, "d11_rank": 3},
+    { "user": "U3", "points": 10, "d11_points":583.5, "d11_rank": 1 },
+    { "user": "U2", "points": 6, "d11_points":560.5, "d11_rank": 2 },
+    { "user": "U13", "points": 2, "d11_points":541.5, "d11_rank": 4 },
+    { "user": "U11", "points": 0, "d11_points":514, "d11_rank": 5 },
+    { "user": "U10", "points": 0, "d11_points":491.5, "d11_rank": 6 },
+    { "user": "U15", "points": 0, "d11_points":449, "d11_rank": 7 },
+    { "user": "U6", "points": 0, "d11_points":383.5, "d11_rank": 8 }
   ]
 }
