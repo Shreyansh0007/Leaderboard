@@ -1,0 +1,14 @@
+{
+  "matchNumber": 6,
+  "matchName": "KKR vs SRH",
+  "date": "2026-04-02",
+  "entries": [
+    { "user": "U1", "points": 4, "d11_points":780, "d11_rank": 3},
+    { "user": "U3", "points": 10, "d11_points":902, "d11_rank": 1 },
+    { "user": "U2", "points": 6, "d11_points":788.5, "d11_rank": 2 },
+    { "user": "U10", "points": 0, "d11_points":724, "d11_rank": 4 },
+    { "user": "U13", "points": 0, "d11_points":718, "d11_rank": 5 },
+    { "user": "U11", "points": 0, "d11_points":669, "d11_rank": 6 },
+    { "user": "U6", "points": 0, "d11_points":659, "d11_rank": 7 }
+  ]
+}
