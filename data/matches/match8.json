@@ -1,0 +1,14 @@
+
+{
+  "matchNumber": 8,
+  "matchName": "DC vs MI",
+  "date": "2026-04-04",
+  "entries": [
+    { "user": "U1", "points": 6, "d11_points":517, "d11_rank": 2},
+    { "user": "U8", "points": 10, "d11_points":576.5, "d11_rank": 1 },
+    { "user": "U10", "points": 4, "d11_points":516.5, "d11_rank": 3 },
+    { "user": "U7", "points": 0, "d11_points":452.5, "d11_rank": 4 },
+    { "user": "U3", "points": 0, "d11_points":433.5, "d11_rank": 5 },
+    { "user": "U11", "points": 0, "d11_points":385, "d11_rank": 6 }
+  ]
+}
