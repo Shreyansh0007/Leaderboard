@@ -1,0 +1,12 @@
+
+{
+  "matchNumber": 9,
+  "matchName": "GT vs RR",
+  "date": "2026-04-04",
+  "entries": [
+    { "user": "U13", "points": 10, "d11_points":972.5, "d11_rank": 1},
+    { "user": "U4", "points": 6, "d11_points":972, "d11_rank": 2 },
+    { "user": "U15", "points": 4, "d11_points":858.5, "d11_rank": 3 },
+    { "user": "U9", "points": 0, "d11_points":834.5, "d11_rank": 4 }
+  ]
+}
